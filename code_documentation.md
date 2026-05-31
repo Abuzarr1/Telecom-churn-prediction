@@ -112,7 +112,7 @@ Customer_Churn/
         ```
         This tells XGBoost to scale the positive class gradients, preventing the model from ignoring churn events due to minority class bias.
     *   **Early Stopping Resolution**: Sets `early_stopping_rounds=10` directly inside the `XGBClassifier` constructor (modern XGBoost 1.6+ API). This monitors performance on a testing split and automatically halts training when validation loss stops improving, completely preventing overfitting.
-    *   **Rigorous Cross-Validation**: Instantiates a separate model `cv_model` without early stopping, and executes a **Stratified 5-Fold Cross-Validation** via `cross_val_score(..., scoring='roc_auc')` to calculate unbiased out-of-fold metrics.
+    *   **Rigorous Cross-Validation**: Instantiates a separate model `cv_model` without early stopping, and executes a **Stratified 5-Fold Cross-Validation** via `cross_val_score(..., scoring='roc_auc')` to calculate unbiased out-of-fold metrics (averaging 0.9592 ROC-AUC).
     *   **Diagnostic Plotting**: Calculates Receiver Operating Characteristic (ROC) coordinates (FPR and TPR) via Scikit-Learn and plots the curve, exporting it to **`outputs/model_eval.png`**.
     *   **Explainable AI**: Fits a SHAP `TreeExplainer` on the testing cohort, generating a feature importance plot that is saved to **`outputs/shap_importance.png`**.
     *   **Model Weights**: Serializes model weights to **`models/churn_model.pkl`**.

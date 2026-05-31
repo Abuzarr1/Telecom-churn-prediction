@@ -73,21 +73,21 @@ Our training classifier is optimized for real-world enterprise constraints:
 *   **Class Imbalance Handling**: Dynamic calculation of `scale_pos_weight` based on active class sizes:
     $$\text{scale\_pos\_weight} = \frac{\text{Retained Accounts (Negative Class)}}{\text{Churned Accounts (Positive Class)}} = 2.7686$$
 *   **Modern Early Stopping**: Prevents overfitting by specifying `early_stopping_rounds=10` inside the `XGBClassifier` constructor (modern XGBoost 1.6+ syntax), fitted with a stratified testing validation set.
-*   **Stratified 5-Fold Cross-Validation**: Reports a robust average out-of-fold generalization score (ROC-AUC: **1.0000**).
+*   **Stratified 5-Fold Cross-Validation**: Reports a robust average out-of-fold generalization score (ROC-AUC: **0.9592**).
 *   **Explainable AI**: Fits a SHAP `TreeExplainer` on the testing cohort, exporting importance parameters to `outputs/shap_importance.png`.
 *   **Performance Plots**: Exports precision/recall and ROC curves to `outputs/model_eval.png`.
 
 ### Model Metrics (XGBoost Classifier)
-*   **Accuracy**: 100.00%
-*   **Precision**: 100.00% (Zero False Alarms)
-*   **Recall**: 100.00% (Caught 100% of Churned accounts)
-*   **ROC-AUC Score**: 1.0000
+*   **Accuracy**: 93.04%
+*   **Precision**: 86.70%
+*   **Recall**: 87.17%
+*   **ROC-AUC Score**: 0.9680
 
 #### Confusion Matrix:
-*   **True Negatives (Retained)**: 1,035
-*   **False Positives**: 0
-*   **False Negatives**: 0
-*   **True Positives (Churned)**: 374
+*   **True Negatives (Retained)**: 985
+*   **False Positives**: 50
+*   **False Negatives**: 48
+*   **True Positives (Churned)**: 326
 
 ---
 
