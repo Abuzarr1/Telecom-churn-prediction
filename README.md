@@ -3,10 +3,10 @@
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.0-4169E1.svg?style=flat&logo=postgresql&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0-blue.svg?style=flat&logo=xgboost&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.30-FF4B4B.svg?style=flat&logo=streamlit&logoColor=white)
+![CLI](https://img.shields.io/badge/CLI-Simulator-green.svg?style=flat)
 ![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.4-F7931E.svg?style=flat&logo=scikit-learn&logoColor=white)
 
-An end-to-end, production-grade machine learning system that predicts which telecom subscribers are at risk of churning. It leverages **PostgreSQL** for data storage and feature aggregations, **XGBoost** for classification, and **SHAP** for explainable AI. The results are served via a visual **Streamlit Dashboard**.
+An end-to-end, production-grade machine learning system that predicts which telecom subscribers are at risk of churning. It leverages **PostgreSQL** for data storage and feature aggregations, **XGBoost** for classification, and **SHAP** for explainable AI. The predictions and simulations are accessed via an interactive, terminal-based **Python CLI Simulator**.
 
 ---
 
@@ -22,8 +22,7 @@ graph TD
     E -->|Compute XAI| G[outputs/shap_importance.png]
     E -->|Generate ROC Curve| H[outputs/model_eval.png]
     E -->|Scored Predictions| I[PostgreSQL: churn_predictions table]
-    I -->|Live Dashboard Lookups| J[src/dashboard.py Streamlit App]
-    G -->|Interactive Rendering| J
+    I -->|Live CLI Lookups| J[src/cli_simulator.py CLI Tool]
 ```
 
 ---
@@ -34,7 +33,7 @@ graph TD
 *   **ORMs & Connections**: SQLAlchemy & Psycopg2
 *   **Machine Learning**: XGBoost Classifier & Scikit-Learn
 *   **Explainable AI (XAI)**: SHAP (SHapley Additive exPlanations)
-*   **Web Dashboard**: Streamlit Web Framework
+*   **Interactive Interface**: Python CLI Simulator (terminal-based)
 *   **Visualizations**: Matplotlib & Seaborn
 *   **Credentials**: python-dotenv
 
@@ -91,12 +90,12 @@ Our training classifier is optimized for real-world enterprise constraints:
 
 ---
 
-## 🖥️ Streamlit Web Dashboard (`src/dashboard.py`)
+## 🖥️ Interactive Python CLI Simulator (`src/cli_simulator.py`)
 
-A fully interactive customer success control center showing:
-*   **Status Metric Cards**: Displays Total Scored Customers, Model Churn Rate (%), and High Churn Risk alert counts.
-*   **High-Risk Target Lists**: Searchable data table filtered to accounts with high probability ($\ge 70\%$) of cancellations, allowing customer success teams to initiate retention campaigns.
-*   **XAI Plot**: Embedded SHAP summary charts representing feature weights to explain *why* the model makes these classifications.
+A terminal-based customer success control center providing:
+*   **Executive Dashboard & Metrics**: Displays Total Scored Customers, Model Churn Rate (%), Monthly Recurring Revenue (MRR) at Risk, and lists the top 10 high-risk accounts.
+*   **Individual Customer Profile Lookup**: Retrieves specific billing details, contract types, tenure, and churn risk scores directly from PostgreSQL.
+*   **What-If Retention Scenario Simulator**: Prompts for simulated customer parameters in real-time, feeding inputs directly into the trained XGBoost model to perform live risk predictions.
 
 ---
 
@@ -125,9 +124,9 @@ You can view the detailed charts and distributions explaining the key drivers of
 venv/bin/jupyter notebook notebooks/eda.ipynb
 ```
 
-### 5. Deploy the Streamlit Dashboard
+### 5. Run the CLI Simulator
 ```bash
-venv/bin/streamlit run src/dashboard.py
+venv/bin/python src/cli_simulator.py
 ```
 
-Open **`http://localhost:8502`** in your browser to inspect the predictive metrics!
+Run the terminal script to view high-risk lists, search customer risk profiles, and simulate real-time scenarios!

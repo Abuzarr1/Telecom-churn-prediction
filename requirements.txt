@@ -7,6 +7,5 @@ xgboost
 shap
 matplotlib
 seaborn
-streamlit
 joblib
 python-dotenv

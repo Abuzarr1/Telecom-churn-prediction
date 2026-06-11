@@ -19,7 +19,7 @@ Customer_Churn/
 │   ├── load_data.py         # Step 1: Idempotent ETL Data Loader
 │   ├── features.py          # Step 2: Feature Engineering & Preprocessing Pipeline
 │   ├── train.py             # Step 3: Model Training, Cross-Validation, & Evaluation
-│   └── dashboard.py         # Step 4: Streamlit Enterprise Dashboard & Simulator
+│   └── cli_simulator.py     # Step 4: Interactive Python CLI Simulator
 ├── models/
 │   └── churn_model.pkl      # Serialized XGBoost model weights (Joblib)
 └── outputs/
@@ -44,7 +44,7 @@ Customer_Churn/
     *   `scikit-learn`: Split functions, diagnostic scoring metrics, and cross-validation tools.
     *   `xgboost`: Extreme Gradient Boosting classifier library.
     *   `shap`: Game-theoretic model explainability (SHapley Additive exPlanations).
-    *   `streamlit`: Low-code interactive web app server framework.
+    *   `joblib`: Object serialization library for loading and saving models.
     *   `python-dotenv`: Automated loading of `.env` configurations.
 
 #### 📄 [.env](file:///Users/macbookpro/Desktop/Customer_Churn/.env)
@@ -130,18 +130,17 @@ Customer_Churn/
 
 ### 5. Product Deployment Layer (`src/`)
 
-#### 📄 [src/dashboard.py](file:///Users/macbookpro/Desktop/Customer_Churn/src/dashboard.py)
-*   **Purpose**: The visual frontend application. It displays high-level business metrics, searchable customer registries, model health plots, and real-time What-If scenario simulations.
+#### 📄 [src/cli_simulator.py](file:///Users/macbookpro/Desktop/Customer_Churn/src/cli_simulator.py)
+*   **Purpose**: The interactive command-line interface. It provides an executive console, customer lookups, and real-time what-if scenario simulations in pure Python.
 *   **Code Mechanics**:
-    *   **Caching Controls**: Utilizes `@st.cache_resource` and `@st.cache_data` on SQLAlchemy connections and database queries to ensure fluid UI interactions.
-    *   **Page 1 (Executive Dashboard)**: Displays metric panels (Total Accounts Scored, Model Churn Rate, Alert Counts) and a searchable table of high-risk customers queried directly from `churn_predictions`.
-    *   **Page 2 (Model Diagnostics)**: Renders the evaluation plots (`outputs/model_eval.png` and `outputs/shap_importance.png`) and outputs classification statistics (Confusion Matrix TP, TN, FP, FN metrics).
-    *   **Page 3 (Real-Time What-If Churn Simulator)**:
-        *   Renders interactive sliders and selects mapped to customer variables (Tenure, average fees, failure counts, contract plan).
-        *   When a user moves any slider, Streamlit automatically re-runs the script.
-        *   The code constructs a single-row Pandas DataFrame using the exact columns, formats, and order required by the training schema:
+    *   **Main Menu Loop**: A standard Python `while True` loop that displays console choices and reads input prompts.
+    *   **Executive Dashboard Menu**: Connects to PostgreSQL using SQLAlchemy, queries customer metrics, calculates active churn rates and MRR at risk, and prints the top 10 highest risk outreach targets.
+    *   **Customer Lookup Menu**: Accepts a Customer ID or name, queries the relational database, and prints key metrics like tenure days and failed payments alongside their calculated model risk score.
+    *   **What-If Churn Simulator Menu**:
+        *   Prompts the user to input details such as customer tenure, monthly charge, payment failures, plan type, and average days late.
+        *   Constructs a single-row Pandas DataFrame matching the exact features, formats, and columns order required by the trained XGBoost model:
             ```python
             input_df = pd.DataFrame([{ ... }])
             input_df = input_df[cols_order]
             ```
-        *   Feeds this DataFrame directly into the loaded model `model.predict_proba(input_df)[0, 1]` to compute an **instantaneous real-time prediction score**, displaying the risk tier callout card on the fly.
+        *   Feeds the structured input dataframe directly into `model.predict_proba(input_df)[0, 1]` to perform live inference, printing the resulting risk percentage and color-coded tier feedback.

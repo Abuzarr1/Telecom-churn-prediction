@@ -1,6 +1,6 @@
 # Customer Churn Analysis & Prediction — Final Project Report
 
-This is the finalized, comprehensive report of the **Customer Churn Prediction System**. The system successfully executes an end-to-end data science and machine learning product suite—from PostgreSQL database ingestion, through feature engineering and tree-based model training, to explainable AI and a live, premium interactive dashboard.
+This is the finalized, comprehensive report of the **Customer Churn Prediction System**. The system successfully executes an end-to-end data science and machine learning product suite—from PostgreSQL database ingestion, through feature engineering and tree-based model training, to explainable AI and an interactive, terminal-based CLI simulator.
 
 ---
 
@@ -8,13 +8,13 @@ This is the finalized, comprehensive report of the **Customer Churn Prediction S
 
 An end-to-end machine learning system that identifies which customers are highly likely to cancel their subscription—**before they actually do**—packaged inside a premium, visual web interface.
 
-### The Churn Command Center (Streamlit Dashboard)
+### The Churn Control Console (Python CLI Simulator)
 
-Our frontend interface connects directly to PostgreSQL and run live inferences with our trained XGBoost model:
+Our terminal application connects directly to PostgreSQL and runs live inference using our trained XGBoost model:
 
-*   **Executive Dashboard Page**: Displays active KPIs (Total Evaluated Clients, Overall Churn Rate, MRR at Risk), Category distributions (Bar chart of 🟢 Low, 🟡 Medium, 🔴 High cohorts), and a searchable client grid.
-*   **Customer Lookup Page**: Select any customer account to check their contract plan, monthly charges, and check their exact predictive features (Failed payments, Days late, Tenure).
-*   **What-If Simulator Page**: Slide sliders representing customer engagement behaviors (e.g. increase billing failures or switch contract types) and see how the model updates its churn predictions in real-time.
+*   **Executive Dashboard Menu Option**: Displays active KPIs (Total Evaluated Clients, Overall Churn Rate, MRR at Risk), Risk Cohort segment distributions, and lists the top 10 highest risk accounts for immediate outreach.
+*   **Customer Profile Lookup Option**: Prompts for a Customer ID to retrieve their contract plan, monthly charges, signup date, and exact predictive features (Failed payments, Tenure days, etc.) directly from PostgreSQL.
+*   **What-If Scenario Simulator Option**: Prompts the user for custom customer parameters (e.g. billing failures, monthly charge, or contract plans) and runs a live prediction using the XGBoost model to display the simulated churn probability.
 
 ---
 
@@ -33,11 +33,11 @@ gantt
     Step 4 - Feature Engineering :done,    des4, 2026-05-27, 2026-05-27
     Step 5 - XGBoost Training    :done,    des5, 2026-05-27, 2026-05-27
     Step 6 - Evaluation & Saving  :done,    des6, 2026-05-27, 2026-05-27
-    Streamlit Dashboard UI       :done,    des7, 2026-05-27, 2026-05-30
+    Interactive CLI Simulator    :done,    des7, 2026-05-27, 2026-05-30
 ```
 
 ### ✅ Step 1 — Set up the Environment
-Configured a stable Python runtime (`Python 3.11` inside `venv`) with psycopg2-binary, pandas, sqlalchemy, scikit-learn, xgboost, shap, and streamlit fully installed.
+Configured a stable Python runtime (`Python 3.11` inside `venv`) with psycopg2-binary, pandas, sqlalchemy, scikit-learn, xgboost, shap, and joblib fully installed.
 
 ### ✅ Step 2 — Created the Database
 Designed and initialized PostgreSQL `churn_db` with 5 relational tables (`customers`, `subscriptions`, `payments`, `usage_events`, and `support_tickets`).
@@ -54,8 +54,8 @@ Wrote **[train.py](file:///Users/macbookpro/Desktop/Customer_Churn/src/train.py)
 ### ✅ Step 6 — Evaluate & Save
 Wrote **[predict.py](file:///Users/macbookpro/Desktop/Customer_Churn/src/predict.py)** to score all 7,043 accounts and save risk levels to database table `churn_predictions` and `outputs/churn_predictions.csv`.
 
-### ✅ Streamlit Dashboard Web UI
-Wrote **[app.py](file:///Users/macbookpro/Desktop/Customer_Churn/src/app.py)** and launched it on `http://localhost:8501`, connecting live data science outcomes to a visual CRM app.
+### ✅ Python CLI Simulator Interface
+Wrote **[cli_simulator.py](file:///Users/macbookpro/Desktop/Customer_Churn/src/cli_simulator.py)**, providing a clean terminal-based simulator for risk assessment, database queries, and live inference.
 
 ---
 
@@ -79,7 +79,7 @@ Customer_Churn/
 │   ├── features.py          # Step 4: SQL Aggregate Joins ➔ customer_features table & CSV
 │   ├── train.py             # Step 5: Model training, metrics, & SHAP png
 │   ├── predict.py           # Step 6: Risk inference ➔ churn_predictions table & CSV
-│   └── app.py               # Streamlit interactive Churn Command Center Web UI
+│   └── cli_simulator.py     # Interactive terminal-based Churn Control Console CLI
 ├── data/
 │   ├── telco_churn.csv      # Raw CSV customer data
 │   └── features.csv         # Computed feature matrix
@@ -94,12 +94,12 @@ Customer_Churn/
 
 ## 🖥️ Live Dashboard & Database Integration
 
-### 1. Launch the Streamlit Dashboard
-To run the interactive web interface locally, execute the following command:
+### 1. Launch the Python CLI Simulator
+To run the interactive terminal interface locally, execute the following command:
 ```bash
-venv/bin/streamlit run src/app.py
+venv/bin/python src/cli_simulator.py
 ```
-Open **`http://localhost:8501`** in your browser to access the Executive KPIs, Search Profiler, and What-If Simulator!
+Interact with the command-line prompts to access the Executive KPIs, Search Profiler, and What-If Simulator!
 
 ### 2. Business Integration Queries (PostgreSQL)
 Because predictions are committed directly to PostgreSQL, marketing teams can easily query high-risk segments:
